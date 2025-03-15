@@ -55,3 +55,5 @@ http://159.223.62.240:8080/docs/index.html
 - Add caching layer to reduce the number of requests to the database.
 - Add cursor-based pagination to improve performance for List products API.
 - Date Format Validation (Regex)
+- Update unit tests to cover all the code.
+- Add CI/CD pipeline to automate the testing and deployment process.
