@@ -119,11 +119,12 @@ definitions:
     type: object
   http.updateCategoryRequest:
     properties:
+      id:
+        type: string
       name:
-        example: Beverages
         type: string
     required:
-    - name
+    - id
     type: object
   http.updateProductRequest:
     properties:
@@ -154,7 +155,7 @@ definitions:
     - category_id
     - id
     type: object
-host: localhost
+host: localhost:8080
 info:
   contact:
     email: leanhtuan1998hl@gmail.com
@@ -165,88 +166,6 @@ info:
   title: Go SOA Test (Source of Asia) API
   version: "1.0"
 paths:
-  /api/statistics/products-per-category:
-    get:
-      consumes:
-      - application/json
-      description: Get Statistic of category product
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Statistic created
-          schema:
-            $ref: '#/definitions/http.StatisticCategoryProductResponse'
-        "400":
-          description: Validation error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "401":
-          description: Unauthorized error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "403":
-          description: Forbidden error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "404":
-          description: Data not found error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "409":
-          description: Data conflict error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-      security:
-      - BearerAuth: []
-      summary: Get Statistic of category product
-      tags:
-      - Statistics
-  /api/statistics/products-per-supplier:
-    get:
-      consumes:
-      - application/json
-      description: Get Statistic of supplier product
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Statistic created
-          schema:
-            $ref: '#/definitions/http.StatisticSupplierProductResponse'
-        "400":
-          description: Validation error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "401":
-          description: Unauthorized error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "403":
-          description: Forbidden error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "404":
-          description: Data not found error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "409":
-          description: Data conflict error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/http.errorResponse'
-      security:
-      - BearerAuth: []
-      summary: Get Statistic of supplier product
-      tags:
-      - Statistics
   /categories:
     get:
       consumes:
@@ -256,12 +175,10 @@ paths:
       - description: Skip
         in: query
         name: skip
-        required: true
         type: integer
       - description: Limit
         in: query
         name: limit
-        required: true
         type: integer
       produces:
       - application/json
@@ -340,7 +257,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -382,7 +299,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -407,7 +324,7 @@ paths:
       summary: Get a category
       tags:
       - Categories
-    put:
+    patch:
       consumes:
       - application/json
       description: update a category's name by id
@@ -416,7 +333,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       - description: Update category request
         in: body
         name: updateCategoryRequest
@@ -465,10 +382,13 @@ paths:
       - application/json
       description: List products with pagination
       parameters:
-      - description: Category ID
+      - collectionFormat: csv
+        description: Category IDs
         in: query
-        name: category_id
-        type: string
+        items:
+          type: string
+        name: category_ids
+        type: array
       - description: Query
         in: query
         name: q
@@ -476,12 +396,10 @@ paths:
       - description: Skip
         in: query
         name: skip
-        required: true
         type: integer
       - description: Limit
         in: query
         name: limit
-        required: true
         type: integer
       produces:
       - application/json
@@ -602,7 +520,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -689,7 +607,7 @@ paths:
         in: path
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -720,10 +638,13 @@ paths:
       - application/json
       description: Export a list of products as a PDF file
       parameters:
-      - description: Category ID
+      - collectionFormat: csv
+        description: Category IDs
         in: query
-        name: category_id
-        type: string
+        items:
+          type: string
+        name: category_ids
+        type: array
       - description: Query
         in: query
         name: q
@@ -731,12 +652,10 @@ paths:
       - description: Skip
         in: query
         name: skip
-        required: true
         type: integer
       - description: Limit
         in: query
         name: limit
-        required: true
         type: integer
       produces:
       - application/pdf
@@ -758,6 +677,88 @@ paths:
       summary: Export products
       tags:
       - Products
+  /statistics/products-per-category:
+    get:
+      consumes:
+      - application/json
+      description: Get Statistic of category product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Statistic created
+          schema:
+            $ref: '#/definitions/http.StatisticCategoryProductResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Statistic of category product
+      tags:
+      - Statistics
+  /statistics/products-per-supplier:
+    get:
+      consumes:
+      - application/json
+      description: Get Statistic of supplier product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Statistic created
+          schema:
+            $ref: '#/definitions/http.StatisticSupplierProductResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Statistic of supplier product
+      tags:
+      - Statistics
 schemes:
 - http
 - https

@@ -24,7 +24,7 @@ import (
 // @contact.url				https://github.com/tuanla/soa-be-test
 // @contact.email				leanhtuan1998hl@gmail.com
 //
-// @host						localhost
+// @host						localhost:8080
 // @BasePath					/v1
 // @schemes					http https
 //

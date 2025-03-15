@@ -113,7 +113,7 @@ type getProductRequest struct {
 //	@Tags			Products
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		uint64			true	"Product ID"
+//	@Param			id	path		string			true	"Product ID"
 //	@Success		200	{object}	productResponse	"Product retrieved"
 //	@Failure		400	{object}	errorResponse	"Validation error"
 //	@Failure		404	{object}	errorResponse	"Data not found error"
@@ -150,7 +150,7 @@ func (ph *ProductHandler) GetProduct(ctx *gin.Context) {
 //	@Tags			Products
 //	@Accept			json
 //	@Produce		json
-//	@Param			id	path		uint64			true	"Product ID"
+//	@Param			id	path		string			true	"Product ID"
 //	@Success		200	{object}	productResponse	"Product retrieved"
 //	@Failure		400	{object}	errorResponse	"Validation error"
 //	@Failure		404	{object}	errorResponse	"Data not found error"
@@ -198,13 +198,13 @@ type listProductsRequest struct {
 //	@Tags			Products
 //	@Accept			json
 //	@Produce		json
-//	@Param			category_id	query		string			false	"Category ID"
-//	@Param			q			query		string			false	"Query"
-//	@Param			skip		query		uint64			true	"Skip"
-//	@Param			limit		query		uint64			true	"Limit"
-//	@Success		200			{object}	meta			"Products retrieved"
-//	@Failure		400			{object}	errorResponse	"Validation error"
-//	@Failure		500			{object}	errorResponse	"Internal server error"
+//	@Param			category_ids	query		[]string		false	"Category IDs"
+//	@Param			q				query		string			false	"Query"
+//	@Param			skip			query		uint64			false	"Skip"
+//	@Param			limit			query		uint64			false	"Limit"
+//	@Success		200				{object}	meta			"Products retrieved"
+//	@Failure		400				{object}	errorResponse	"Validation error"
+//	@Failure		500				{object}	errorResponse	"Internal server error"
 //	@Router			/products [get]
 //	@Security		BearerAuth
 func (ph *ProductHandler) ListProducts(ctx *gin.Context) {
@@ -254,13 +254,13 @@ func (ph *ProductHandler) ListProducts(ctx *gin.Context) {
 //	@Tags			Products
 //	@Accept			json
 //	@Produce		application/pdf
-//	@Param			category_id	query		string			false	"Category ID"
-//	@Param			q			query		string			false	"Query"
-//	@Param			skip		query		uint64			true	"Skip"
-//	@Param			limit		query		uint64			true	"Limit"
-//	@Success		200			{file}		application/pdf	"PDF file generated"
-//	@Failure		400			{object}	errorResponse	"Validation error"
-//	@Failure		500			{object}	errorResponse	"Internal server error"
+//	@Param			category_ids	query		[]string		false	"Category IDs"
+//	@Param			q				query		string			false	"Query"
+//	@Param			skip			query		uint64			false	"Skip"
+//	@Param			limit			query		uint64			false	"Limit"
+//	@Success		200				{file}		application/pdf	"PDF file generated"
+//	@Failure		400				{object}	errorResponse	"Validation error"
+//	@Failure		500				{object}	errorResponse	"Internal server error"
 //	@Router			/products/export [get]
 //	@Security		BearerAuth
 func (ph *ProductHandler) ExportProducts(ctx *gin.Context) {

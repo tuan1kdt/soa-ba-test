@@ -46,7 +46,7 @@ type StatisticCategoryProductResponse struct {
 //	@Failure		404	{object}	errorResponse						"Data not found error"
 //	@Failure		409	{object}	errorResponse						"Data conflict error"
 //	@Failure		500	{object}	errorResponse						"Internal server error"
-//	@Router			/api/statistics/products-per-supplier [get]
+//	@Router			/statistics/products-per-supplier [get]
 //	@Security		BearerAuth
 func (ch *StatisticHandler) GetSupplierProduct(ctx *gin.Context) {
 	res, err := ch.svc.StatisticSupplierProduct(ctx.Request.Context())
@@ -82,7 +82,7 @@ func (ch *StatisticHandler) GetSupplierProduct(ctx *gin.Context) {
 //	@Failure		404	{object}	errorResponse						"Data not found error"
 //	@Failure		409	{object}	errorResponse						"Data conflict error"
 //	@Failure		500	{object}	errorResponse						"Internal server error"
-//	@Router			/api/statistics/products-per-category [get]
+//	@Router			/statistics/products-per-category [get]
 //	@Security		BearerAuth
 func (ch *StatisticHandler) GetCategoryProduct(ctx *gin.Context) {
 	res, err := ch.svc.StatisticCategoryProduct(ctx.Request.Context())

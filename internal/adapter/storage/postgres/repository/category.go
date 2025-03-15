@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
@@ -89,7 +88,7 @@ func (cr *CategoryRepository) ListCategories(ctx context.Context, skip, limit ui
 		From("categories").
 		OrderBy("id").
 		Limit(limit).
-		Offset((skip - 1) * limit)
+		Offset((skip) * limit)
 
 	sql, args, err := query.ToSql()
 	if err != nil {
@@ -120,7 +119,6 @@ func (cr *CategoryRepository) ListCategories(ctx context.Context, skip, limit ui
 func (cr *CategoryRepository) UpdateCategory(ctx context.Context, category *domain.Category) (*domain.Category, error) {
 	query := cr.db.QueryBuilder.Update("categories").
 		Set("name", category.Name).
-		Set("updated_at", time.Now()).
 		Where(sq.Eq{"id": category.ID}).
 		Suffix("RETURNING *")
 
