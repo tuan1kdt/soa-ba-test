@@ -1,0 +1,770 @@
+basePath: /v1
+definitions:
+  http.StatisticCategoryProductResponse:
+    properties:
+      category_id:
+        type: string
+      category_name:
+        type: string
+      percentage:
+        type: number
+    type: object
+  http.StatisticSupplierProductResponse:
+    properties:
+      percentage:
+        type: number
+      supplier_id:
+        type: string
+      supplier_name:
+        type: string
+    type: object
+  http.categoryResponse:
+    properties:
+      id:
+        example: "1"
+        type: string
+      name:
+        example: Foods
+        type: string
+    type: object
+  http.createCategoryRequest:
+    properties:
+      name:
+        example: Foods
+        type: string
+    required:
+    - name
+    type: object
+  http.createProductRequest:
+    properties:
+      categoryID:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      reference:
+        type: string
+      status:
+        type: string
+      stockCity:
+        type: string
+      supplierID:
+        type: string
+    type: object
+  http.errorResponse:
+    properties:
+      messages:
+        example:
+        - Error message 1
+        - ' Error message 2'
+        items:
+          type: string
+        type: array
+      success:
+        example: false
+        type: boolean
+    type: object
+  http.meta:
+    properties:
+      limit:
+        example: 10
+        type: integer
+      skip:
+        example: 0
+        type: integer
+      total:
+        example: 100
+        type: integer
+    type: object
+  http.productResponse:
+    properties:
+      addedDate:
+        type: string
+      category:
+        $ref: '#/definitions/http.categoryResponse'
+      categoryID:
+        type: string
+      id:
+        example: "1"
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      reference:
+        type: string
+      status:
+        type: string
+      stockCity:
+        type: string
+      supplierID:
+        type: string
+    type: object
+  http.response:
+    properties:
+      data: {}
+      message:
+        example: Success
+        type: string
+      success:
+        example: true
+        type: boolean
+    type: object
+  http.updateCategoryRequest:
+    properties:
+      name:
+        example: Beverages
+        type: string
+    required:
+    - name
+    type: object
+  http.updateProductRequest:
+    properties:
+      category_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        example: 2000
+        minimum: 0
+        type: number
+      status:
+        enum:
+        - Available
+        - "On"
+        - Order
+        - Out
+        - of
+        - Stock
+        type: string
+      stock:
+        example: 200
+        minimum: 0
+        type: integer
+    required:
+    - category_id
+    - id
+    type: object
+host: localhost
+info:
+  contact:
+    email: leanhtuan1998hl@gmail.com
+    name: tuanla
+    url: https://github.com/tuanla/soa-be-test
+  description: This is a simple RESTful Product Backend Service API written in Go
+    using Gin web framework, MySQL database
+  title: Go SOA Test (Source of Asia) API
+  version: "1.0"
+paths:
+  /api/statistics/products-per-category:
+    get:
+      consumes:
+      - application/json
+      description: Get Statistic of category product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Statistic created
+          schema:
+            $ref: '#/definitions/http.StatisticCategoryProductResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Statistic of category product
+      tags:
+      - Statistics
+  /api/statistics/products-per-supplier:
+    get:
+      consumes:
+      - application/json
+      description: Get Statistic of supplier product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Statistic created
+          schema:
+            $ref: '#/definitions/http.StatisticSupplierProductResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get Statistic of supplier product
+      tags:
+      - Statistics
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: List categories with pagination
+      parameters:
+      - description: Skip
+        in: query
+        name: skip
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Categories displayed
+          schema:
+            $ref: '#/definitions/http.meta'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: List categories
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      description: create a new category with name
+      parameters:
+      - description: Create category request
+        in: body
+        name: createCategoryRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.createCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category created
+          schema:
+            $ref: '#/definitions/http.categoryResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new category
+      tags:
+      - Categories
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category deleted
+          schema:
+            $ref: '#/definitions/http.response'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a category
+      tags:
+      - Categories
+    get:
+      consumes:
+      - application/json
+      description: get a category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category retrieved
+          schema:
+            $ref: '#/definitions/http.categoryResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a category
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      description: update a category's name by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update category request
+        in: body
+        name: updateCategoryRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.updateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category updated
+          schema:
+            $ref: '#/definitions/http.categoryResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a category
+      tags:
+      - Categories
+  /products:
+    get:
+      consumes:
+      - application/json
+      description: List products with pagination
+      parameters:
+      - description: Category ID
+        in: query
+        name: category_id
+        type: string
+      - description: Query
+        in: query
+        name: q
+        type: string
+      - description: Skip
+        in: query
+        name: skip
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Products retrieved
+          schema:
+            $ref: '#/definitions/http.meta'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: List products
+      tags:
+      - Products
+    post:
+      consumes:
+      - application/json
+      description: create a new product with name, image, price, and stock
+      parameters:
+      - description: Create product request
+        in: body
+        name: createProductRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.createProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product created
+          schema:
+            $ref: '#/definitions/http.productResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new product
+      tags:
+      - Products
+  /products/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a product by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product deleted
+          schema:
+            $ref: '#/definitions/http.response'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a product
+      tags:
+      - Products
+    get:
+      consumes:
+      - application/json
+      description: get a product by id with its category
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product retrieved
+          schema:
+            $ref: '#/definitions/http.productResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a product
+      tags:
+      - Products
+    patch:
+      consumes:
+      - application/json
+      description: update a product's name, image, price, or stock by id
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update product request
+        in: body
+        name: updateProductRequest
+        required: true
+        schema:
+          $ref: '#/definitions/http.updateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product updated
+          schema:
+            $ref: '#/definitions/http.productResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "401":
+          description: Unauthorized error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "403":
+          description: Forbidden error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Data conflict error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a product
+      tags:
+      - Products
+  /products/{id}/distance:
+    get:
+      consumes:
+      - application/json
+      description: get a product by id with its category
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Product retrieved
+          schema:
+            $ref: '#/definitions/http.productResponse'
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Data not found error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get a product
+      tags:
+      - Products
+  /products/export:
+    get:
+      consumes:
+      - application/json
+      description: Export a list of products as a PDF file
+      parameters:
+      - description: Category ID
+        in: query
+        name: category_id
+        type: string
+      - description: Query
+        in: query
+        name: q
+        type: string
+      - description: Skip
+        in: query
+        name: skip
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/pdf
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+        "400":
+          description: Validation error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      security:
+      - BearerAuth: []
+      summary: Export products
+      tags:
+      - Products
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and the access token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
