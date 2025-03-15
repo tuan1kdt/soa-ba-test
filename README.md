@@ -8,6 +8,14 @@ It uses [Gin](https://gin-gonic.com/) as the HTTP framework and [PostgreSQL](htt
 
 ## Getting Started
 
+### Fast Testing
+I currently have a running instance of the application on my VPS. You can test the application by sending requests to the following URL:
+
+```bash
+http://159.223.62.240:8080/docs/index.html
+```
+
+### Running Locally
 1. If you do not use devcontainer, ensure you have [Go](https://go.dev/dl/) 1.23 or higher and [Task](https://taskfile.dev/installation/) installed on your machine:
 
     ```bash

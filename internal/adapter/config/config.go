@@ -48,6 +48,7 @@ type (
 	}
 	// HTTP contains all the environment variables for the http server
 	HTTP struct {
+		Host           string
 		Env            string
 		URL            string
 		Port           string
@@ -92,6 +93,7 @@ func New() (*Container, error) {
 	}
 
 	http := &HTTP{
+		Host:           os.Getenv("HTTP_HOST"),
 		Env:            os.Getenv("APP_ENV"),
 		URL:            os.Getenv("HTTP_URL"),
 		Port:           os.Getenv("HTTP_PORT"),

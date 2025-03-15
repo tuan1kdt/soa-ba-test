@@ -9,6 +9,7 @@ import (
 	sloggin "github.com/samber/slog-gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/tuan1kdt/soa-ba-test/docs"
 	"github.com/tuan1kdt/soa-ba-test/internal/adapter/config"
 )
 
@@ -48,6 +49,7 @@ func NewRouter(
 	//}
 
 	// Swagger
+	docs.SwaggerInfo.Host = config.Host
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := router.Group("/v1")
