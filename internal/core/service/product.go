@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/tuan1kdt/soa-ba-test/internal/core/domain"
 	"github.com/tuan1kdt/soa-ba-test/internal/core/port"
-	"github.com/tuan1kdt/soa-ba-test/internal/core/util"
 )
 
 /**
@@ -232,18 +231,6 @@ func (ps *ProductService) DeleteProduct(ctx context.Context, id uuid.UUID) error
 		if err == domain.ErrDataNotFound {
 			return err
 		}
-		return domain.ErrInternal
-	}
-
-	cacheKey := util.GenerateCacheKey("product", id)
-
-	err = ps.cache.Delete(ctx, cacheKey)
-	if err != nil {
-		return domain.ErrInternal
-	}
-
-	err = ps.cache.DeleteByPrefix(ctx, "products:*")
-	if err != nil {
 		return domain.ErrInternal
 	}
 
